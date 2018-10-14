@@ -6,5 +6,3 @@ MyShuttle is a sample Java/JEE application that provides booking system, admin p
 
 
 
-
-
