@@ -9,7 +9,7 @@ public class Distance
     
     public Distance()
     {
-
+//test
      }
      
              public float startingpoint;
