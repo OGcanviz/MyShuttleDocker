@@ -2,8 +2,8 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "dev" {
-  name     = "${var.resource_group_name}"
-  location = "${var.location}"
+  name     = "${var.azure["resource_group_name"]}"
+  location = "${var.azure["location"]}"
 
   tags {
     environment = "DEV"
@@ -12,7 +12,7 @@ resource "azurerm_resource_group" "dev" {
 }
 
 resource "azurerm_app_service_plan" "dev" {
-  name                = "${var.resource_name}"
+  name                = "${var.azure["resource_name"]}"
   location            = "${azurerm_resource_group.dev.location}"
   resource_group_name = "${azurerm_resource_group.dev.name}"
   kind                = "Linux"
@@ -29,7 +29,7 @@ resource "azurerm_app_service_plan" "dev" {
 }
 
 resource "azurerm_app_service" "dev" {
-  name                = "${var.resource_name}"
+  name                = "${var.azure["resource_name"]}"
   location            = "${azurerm_resource_group.dev.location}"
   resource_group_name = "${azurerm_resource_group.dev.name}"
   app_service_plan_id = "${azurerm_app_service_plan.dev.id}"
@@ -37,24 +37,24 @@ resource "azurerm_app_service" "dev" {
   site_config {
     dotnet_framework_version = "v4.0"
     scm_type                 = "LocalGit"
-    linux_fx_version = "DOCKER|${var.acr_host}/my-shuttle:${var.build_number}"
+    linux_fx_version = "DOCKER|${var.acr["host"]}/my-shuttle:${var.build_number}"
   }
 
   app_settings {
-    "DOCKER_REGISTRY_SERVER_URL"      =  "https://${var.acr_host}"
-    "DOCKER_REGISTRY_SERVER_USERNAME" =  "${var.acr_username}"
-    "DOCKER_REGISTRY_SERVER_PASSWORD" =  "${var.acr_password}"
+    "DOCKER_REGISTRY_SERVER_URL"      =  "https://${var.acr["host"]}"
+    "DOCKER_REGISTRY_SERVER_USERNAME" =  "${var.acr["username"]}"
+    "DOCKER_REGISTRY_SERVER_PASSWORD" =  "${var.acr["password"]}"
   }
 
   connection_string {
     name  = "MyShuttleDb"
     type  = "MySql"
-    value = "jdbc:mysql://${var.resource_name}.mysql.database.azure.com:3306/myshuttledb?user=${var.mysql_username}@${var.resource_name}&password=${var.mysql_password}"
+    value = "jdbc:mysql://${var.azure["resource_name"]}.mysql.database.azure.com:3306/myshuttledb?user=${var.mysql["username"]}@${var.azure["resource_name"]}&password=${var.mysql["password"]}"
   }
 }
 
 resource "azurerm_mysql_server" "dev" {
-  name                = "${var.resource_name}"
+  name                = "${var.azure["resource_name"]}"
   location            = "${azurerm_resource_group.dev.location}"
   resource_group_name = "${azurerm_resource_group.dev.name}"
 
@@ -71,8 +71,8 @@ resource "azurerm_mysql_server" "dev" {
     geo_redundant_backup = "Disabled"
   }
 
-  administrator_login = "${var.mysql_username}"
-  administrator_login_password = "${var.mysql_password}"
+  administrator_login = "${var.mysql["username"]}"
+  administrator_login_password = "${var.mysql["password"]}"
   version = "5.7"
   ssl_enforcement = "Disabled"
 }
