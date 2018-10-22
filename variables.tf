@@ -1,42 +1,16 @@
-variable "resource_group_name" {
-  description = "The name of the resource group"
-  default     = ""
+variable "azure" {
+  description = "Configuration of the target Azure environment. Keys: resource_group_name, resource_name, location." 
+  type        = "map"
 }
 
-variable "resource_name" {
-  description = "The name of the resource"
-  default     = ""
+variable "acr" {
+  description = "The host and credentials of the Azure Container Registry. Keys: host, username, password."
+  type        = "map"
 }
 
-variable "location" {
-  description = "The location where resources are created"
-  default     = ""
-}
-
-variable "acr_host" {
-  description = "The host of the Azure Container Registry, for example: holdemodev.azurecr.io"
-  default     = ""
-}
-
-variable "acr_username" {
-  description = "Username of the Azure Container Registry"
-  default     = ""
-}
-
-variable "acr_password" {
-  description = "Password of the Azure Container Registry"
-  default     = ""
-}
-
-
-variable "mysql_username" {
-  description = "MySQL username"
-  default     = ""
-}
-
-variable "mysql_password" {
-  description = "MySQL password"
-  default     = ""
+variable "mysql" {
+  description = "Credentials of the MySQL server. Keys: username, password."
+  type        = "map"
 }
 
 variable "build_number" {
