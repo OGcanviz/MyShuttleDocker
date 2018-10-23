@@ -35,6 +35,7 @@ resource "azurerm_app_service" "dev" {
   app_service_plan_id = "${azurerm_app_service_plan.dev.id}"
 
   site_config {
+    always_on                = true
     dotnet_framework_version = "v4.0"
     scm_type                 = "LocalGit"
     linux_fx_version = "DOCKER|${var.acr["host"]}/my-shuttle:${var.build_number}"
