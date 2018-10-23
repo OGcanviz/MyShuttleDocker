@@ -1,0 +1,1 @@
+SELECT count(*) FROM information_schema.TABLES WHERE (TABLE_SCHEMA = 'myshuttledb') AND (TABLE_NAME = 'employees')
