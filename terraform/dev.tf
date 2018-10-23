@@ -38,7 +38,7 @@ resource "azurerm_app_service" "dev" {
     always_on                = true
     dotnet_framework_version = "v4.0"
     scm_type                 = "LocalGit"
-    linux_fx_version = "DOCKER|${var.acr["host"]}/my-shuttle:${var.build_number}"
+    linux_fx_version = "DOCKER|${var.acr["host"]}/${var.acr["repository"]}:${var.acr["tag"]}"
   }
 
   app_settings {
@@ -50,7 +50,7 @@ resource "azurerm_app_service" "dev" {
   connection_string {
     name  = "MyShuttleDb"
     type  = "MySql"
-    value = "jdbc:mysql://${var.azure["resource_name"]}.mysql.database.azure.com:3306/myshuttledb?user=${var.mysql["username"]}@${var.azure["resource_name"]}&password=${var.mysql["password"]}"
+    value = "jdbc:mysql://${var.azure["resource_name"]}.mysql.database.azure.com:3306/${var.mysql["database"]}?user=${var.mysql["username"]}@${var.azure["resource_name"]}&password=${var.mysql["password"]}"
   }
 }
 
@@ -78,8 +78,8 @@ resource "azurerm_mysql_server" "dev" {
   ssl_enforcement = "Disabled"
 }
 
-resource "azurerm_mysql_database" "myshuttledb" {
-  name                = "myshuttledb"
+resource "azurerm_mysql_database" "db" {
+  name                = "${var.mysql["database"]}"
   resource_group_name = "${azurerm_resource_group.dev.name}"
   server_name         = "${azurerm_mysql_server.dev.name}"
   charset             = "utf8"
